@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 from collections import Counter
@@ -97,44 +96,36 @@ class DecisionTreeID3:
     def predict(self, data):
         return [self._predict_one(example, self.tree) for example in data]
 
-# Load datasets
 train_file_path = 'DataSets/Car/train.csv'
 test_file_path = 'DataSets/Car/test.csv'
 
 train_df = pd.read_csv(train_file_path, header=None)
 test_df = pd.read_csv(test_file_path, header=None)
 
-# Convert the dataframe to a list for the algorithm
 train_data = train_df.values.tolist()
 test_data = test_df.values.tolist()
 true_labels = [row[-1] for row in test_data]
 
-# Instantiate decision trees with different criteria and max_depth 5 for fair comparison
 
-# Criterion: Entropy
 decision_tree_entropy = DecisionTreeID3(criterion='entropy', max_depth=5)
 decision_tree_entropy.fit(train_data)
 predictions_entropy = decision_tree_entropy.predict(test_data)
 accuracy_entropy = sum(1 for true, pred in zip(true_labels, predictions_entropy) if true == pred) / len(true_labels)
 
-# Criterion: Gini Index
 decision_tree_gini = DecisionTreeID3(criterion='gini', max_depth=5)
 decision_tree_gini.fit(train_data)
 predictions_gini = decision_tree_gini.predict(test_data)
 accuracy_gini = sum(1 for true, pred in zip(true_labels, predictions_gini) if true == pred) / len(true_labels)
 
-# Criterion: Majority Error
 decision_tree_majority = DecisionTreeID3(criterion='majority_error', max_depth=5)
 decision_tree_majority.fit(train_data)
 predictions_majority = decision_tree_majority.predict(test_data)
 accuracy_majority = sum(1 for true, pred in zip(true_labels, predictions_majority) if true == pred) / len(true_labels)
 
-# Display the accuracies
 print(f"Accuracy with Entropy: {accuracy_entropy * 100:.2f}%")
 print(f"Accuracy with Gini Index: {accuracy_gini * 100:.2f}%")
 print(f"Accuracy with Majority Error: {accuracy_majority * 100:.2f}%")
 
-# Initialize dictionaries to store the errors for each depth, criterion, and dataset
 train_errors = {
     'entropy': [],
     'gini': [],
@@ -147,13 +138,12 @@ test_errors = {
     'majority_error': []
 }
 
-# Function to calculate error rate (1 - accuracy)
+# Error rate (1 - accuracy)
 def calculate_error(predictions, true_labels):
     return 1 - (sum(1 for true, pred in zip(true_labels, predictions) if true == pred) / len(true_labels))
 
 # Iterate over maximum depths from 1 to 6
 for depth in range(1, 7):
-    # Criterion: Entropy
     decision_tree_entropy = DecisionTreeID3(criterion='entropy', max_depth=depth)
     decision_tree_entropy.fit(train_data)
     predictions_train_entropy = decision_tree_entropy.predict(train_data)
@@ -161,7 +151,6 @@ for depth in range(1, 7):
     train_errors['entropy'].append(calculate_error(predictions_train_entropy, [row[-1] for row in train_data]))
     test_errors['entropy'].append(calculate_error(predictions_test_entropy, true_labels))
     
-    # Criterion: Gini Index
     decision_tree_gini = DecisionTreeID3(criterion='gini', max_depth=depth)
     decision_tree_gini.fit(train_data)
     predictions_train_gini = decision_tree_gini.predict(train_data)
@@ -169,7 +158,6 @@ for depth in range(1, 7):
     train_errors['gini'].append(calculate_error(predictions_train_gini, [row[-1] for row in train_data]))
     test_errors['gini'].append(calculate_error(predictions_test_gini, true_labels))
     
-    # Criterion: Majority Error
     decision_tree_majority = DecisionTreeID3(criterion='majority_error', max_depth=depth)
     decision_tree_majority.fit(train_data)
     predictions_train_majority = decision_tree_majority.predict(train_data)
@@ -177,7 +165,6 @@ for depth in range(1, 7):
     train_errors['majority_error'].append(calculate_error(predictions_train_majority, [row[-1] for row in train_data]))
     test_errors['majority_error'].append(calculate_error(predictions_test_majority, true_labels))
 
-# Convert errors to a DataFrame to display results in a table
 results_df = pd.DataFrame({
     'Max Depth': range(1, 7),
     'Train Error (Entropy)': train_errors['entropy'],

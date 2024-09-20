@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from collections import Counter
+!pip install ace_tools
 
 def entropy(labels):
     total_count = len(labels)
@@ -40,9 +41,8 @@ def information_gain(data, attribute_index, labels, criterion):
     
     return initial_impurity - weighted_impurity
 
-# ID3 Decision Tree Algorithm
 class DecisionTreeID3:
-    def __init__(self, criterion='entropy', max_depth=None):
+    def _init_(self, criterion='entropy', max_depth=None):
         self.criterion = criterion
         self.max_depth = max_depth
         self.tree = None
@@ -164,7 +164,6 @@ for depth in range(1, 7):
     predictions_test_majority = decision_tree_majority.predict(test_data)
     train_errors['majority_error'].append(calculate_error(predictions_train_majority, [row[-1] for row in train_data]))
     test_errors['majority_error'].append(calculate_error(predictions_test_majority, true_labels))
-
 results_df = pd.DataFrame({
     'Max Depth': range(1, 7),
     'Train Error (Entropy)': train_errors['entropy'],
@@ -173,6 +172,5 @@ results_df = pd.DataFrame({
     'Test Error (Gini)': test_errors['gini'],
     'Train Error (Majority Error)': train_errors['majority_error'],
     'Test Error (Majority Error)': test_errors['majority_error']
-})
-
-import ace_tools as tools; tools.display_dataframe_to_user(name="Prediction Error Results", dataframe=results_df)
+}) 
+print(results_df)

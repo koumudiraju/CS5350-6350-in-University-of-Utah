@@ -3,13 +3,10 @@ import pandas as pd
 from collections import Counter
 
 def replace_unknown_with_majority(data):
-    # Iterate over columns
     for col in range(len(data[0])):
-        # Get the majority value for the column (excluding 'unknown')
         values = [row[col] for row in data if row[col] != 'unknown']
         majority_value = Counter(values).most_common(1)[0][0]
         
-        # Replace 'unknown' with the majority value
         for row in data:
             if row[col] == 'unknown':
                 row[col] = majority_value
@@ -78,7 +75,7 @@ bank_test_file_path = 'DataSets/Bank/test.csv'
 bank_train_df = pd.read_csv(bank_train_file_path, header=None)
 bank_test_df = pd.read_csv(bank_test_file_path, header=None)
 
-numerical_columns = [0, 5, 11, 12]  # Assuming these are the numerical columns
+numerical_columns = [0, 5, 9, 11, 12, 13, 14]  
 bank_train_data = binarize_numerical_features(bank_train_df.values.tolist(), numerical_columns)
 bank_test_data = binarize_numerical_features(bank_test_df.values.tolist(), numerical_columns)
 

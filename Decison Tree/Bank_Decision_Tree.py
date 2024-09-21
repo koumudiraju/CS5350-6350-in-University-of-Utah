@@ -110,7 +110,7 @@ bank_test_file_path = 'DataSets/Bank/test.csv'
 bank_train_df = pd.read_csv(bank_train_file_path, header=None)
 bank_test_df = pd.read_csv(bank_test_file_path, header=None)
 
-numerical_columns = [0, 5, 9, 11, 12, 13, 14]  # Assuming these are the numerical columns
+numerical_columns = [0, 5, 9, 11, 12, 13, 14] 
 bank_train_data = binarize_numerical_features(bank_train_df.values.tolist(), numerical_columns)
 bank_test_data = binarize_numerical_features(bank_test_df.values.tolist(), numerical_columns)
 

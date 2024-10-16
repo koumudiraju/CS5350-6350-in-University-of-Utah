@@ -3,8 +3,8 @@ from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 import pandas as pd
 
-column_headers = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
-dtype_dict = {
+columns = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
+data_types = {
     'age': float,
     'job': str,
     'marital': str,
@@ -25,11 +25,11 @@ dtype_dict = {
 }
 train_file = "DataSets/Bank/train.csv"
 test_file = "DataSets/Bank/test.csv"
-train_df = pd.read_csv(train_file, names=column_headers, dtype=dtype_dict)
+train_df = pd.read_csv(train_file, names=columns, dtype=data_types)
 X_train = train_df.drop('y', axis=1).values
 y_train = train_df['y'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 
-test_df = pd.read_csv(test_file, names=column_headers, dtype=dtype_dict)
+test_df = pd.read_csv(test_file, names=columns, dtype=data_types)
 X_test = test_df.drop('y', axis=1).values
 y_test = test_df['y'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 

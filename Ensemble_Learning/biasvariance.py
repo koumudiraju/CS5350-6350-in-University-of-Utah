@@ -2,8 +2,8 @@ import numpy as np
 from sklearn.metrics import mean_squared_error
 import pandas as pd
 
-column_headers = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
-dtype_mappings = {
+columns = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
+data_types = {
     'age': float,
     'job': str,
     'marital': str,
@@ -24,11 +24,11 @@ dtype_mappings = {
 }
 train_data_path = "DataSets/Bank/train.csv"
 test_data_path = "DataSets/Bank/test.csv"
-train_df = pd.read_csv(train_data_path, names=column_headers, dtype=dtype_mappings)
+train_df = pd.read_csv(train_data_path, names=columns, dtype=data_types)
 X_train = train_df.drop('y', axis=1).values
 y_train = train_df['y'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 
-test_df = pd.read_csv(test_data_path, names=column_headers, dtype=dtype_mappings)
+test_df = pd.read_csv(test_data_path, names=columns, dtype=data_types)
 X_test = test_df.drop('y', axis=1).values
 y_test = test_df['y'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 

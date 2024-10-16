@@ -3,8 +3,8 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 
-train_file = "/content/sample_data/Bank/train.csv"
-test_file = "/content/sample_data/Bank/test.csv"
+train_file = "/DataSets/Bank/train.csv"
+test_file = "/DataSets/Bank/test.csv"
 
 columns = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
 data_types = {

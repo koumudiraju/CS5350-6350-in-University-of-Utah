@@ -4,7 +4,7 @@ from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 
 # Load Data
-column_names = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'label']
+columns = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'label']
 data_types = {
     'age': float,
     'job': str,
@@ -26,11 +26,11 @@ data_types = {
 }
 train_path = "datasets/bank/train.csv"
 test_path = "datasets/bank/test.csv"
-train_data = pd.read_csv(train_path, names=column_names, dtype=data_types)
+train_data = pd.read_csv(train_path, names=columns, dtype=data_types)
 X_train_data = train_data.drop('label', axis=1).values
 y_train_data = train_data['label'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 
-test_data = pd.read_csv(test_path, names=column_names, dtype=data_types)
+test_data = pd.read_csv(test_path, names=columns, dtype=data_types)
 X_test_data = test_data.drop('label', axis=1).values
 y_test_data = test_data['label'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 

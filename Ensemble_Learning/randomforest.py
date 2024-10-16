@@ -3,7 +3,6 @@ from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Load Data
 column_headers = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
 dtype_dict = {
     'age': float,
@@ -24,8 +23,8 @@ dtype_dict = {
     'poutcome': str,
     'y': str 
 }
-train_file = "/content/sample_data/Bank/train.csv"
-test_file = "/content/sample_data/Bank/test.csv"
+train_file = "DataSets/Bank/train.csv"
+test_file = "DataSets/Bank/test.csv"
 train_df = pd.read_csv(train_file, names=column_headers, dtype=dtype_dict)
 X_train = train_df.drop('y', axis=1).values
 y_train = train_df['y'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
@@ -34,7 +33,6 @@ test_df = pd.read_csv(test_file, names=column_headers, dtype=dtype_dict)
 X_test = test_df.drop('y', axis=1).values
 y_test = test_df['y'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 
-# Helper function: Calculate entropy
 def calculate_entropy(counts):
     total = sum(counts)
     entropy_value = 0
@@ -44,7 +42,6 @@ def calculate_entropy(counts):
             entropy_value -= p * np.log2(p)
     return entropy_value
 
-# Helper function: Calculate information gain
 def calculate_information_gain(X, Y, attribute):
     _, counts = np.unique(Y, return_counts=True)
     entropy_attribute = calculate_entropy(counts)
@@ -58,7 +55,6 @@ def calculate_information_gain(X, Y, attribute):
     info_gain = entropy_attribute - entropy_parent
     return info_gain, entropy_attribute, entropy_parent
 
-# Helper function: Build decision tree (stump)
 def build_tree(X, Y, max_depth, current_depth=0):
     if current_depth >= max_depth or len(np.unique(Y)) == 1:
         vals, counts = np.unique(Y, return_counts=True)
@@ -85,7 +81,6 @@ def build_tree(X, Y, max_depth, current_depth=0):
 
     return tree
 
-# Helper function: Make predictions using decision tree
 def predict_tree(tree, x):
     if not isinstance(tree, dict):
         return tree
@@ -96,7 +91,6 @@ def predict_tree(tree, x):
     else:
         return 0  # Return default class (0)
 
-# Train and predict using decision tree
 def train_decision_tree(X, Y, max_depth):
     return build_tree(X, Y, max_depth)
 
@@ -106,7 +100,6 @@ def predict_decision_tree(tree, X):
         predictions.append(predict_tree(tree, X[i]))
     return np.array(predictions)
 
-# Random forest implementation
 def random_forest(X, Y, num_trees, max_features, max_depth):
     trees = []
     n_samples, n_features = X.shape
@@ -121,7 +114,6 @@ def random_forest(X, Y, num_trees, max_features, max_depth):
 
     return trees
 
-# Random forest prediction
 def predict_random_forest(trees, X):
     predictions = np.zeros(X.shape[0])
     for tree, selected_features in trees:
@@ -129,7 +121,6 @@ def predict_random_forest(trees, X):
         predictions += predict_decision_tree(tree, X_subset)
     return np.sign(predictions)
 
-# Random forest experimentation with different number of trees and feature subsets
 num_trees_range = range(1, 5)
 max_features_range = [2, 4, 6]
 
@@ -148,7 +139,6 @@ for max_features in max_features_range:
         train_errors_rf[max_features].append(train_error)
         test_errors_rf[max_features].append(test_error)
 
-# Plotting training and test errors
 plt.figure(figsize=(12, 6))
 for max_features in max_features_range:
     plt.plot(num_trees_range, train_errors_rf[max_features], label=f'Train Error (max_features={max_features})')

@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 
-# Load Data
 columns = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'label']
 data_types = {
     'age': float,
@@ -34,7 +33,6 @@ test_data = pd.read_csv(test_path, names=columns, dtype=data_types)
 X_test_data = test_data.drop('label', axis=1).values
 y_test_data = test_data['label'].apply(lambda x: 1 if x == 'yes' else 0).values.astype(float)
 
-# Helper function to calculate entropy
 def entropy_calc(value_counts):
     total_count = sum(value_counts)
     entropy_value = 0
@@ -44,7 +42,6 @@ def entropy_calc(value_counts):
             entropy_value -= prob * np.log2(prob)
     return entropy_value
 
-# Helper function to calculate information gain
 def info_gain_calc(X, Y, feature):
     _, class_counts = np.unique(Y, return_counts=True)
     parent_entropy = entropy_calc(class_counts)
@@ -57,7 +54,6 @@ def info_gain_calc(X, Y, feature):
     information_gain = parent_entropy - conditional_entropy
     return information_gain
 
-# Function to build a decision tree (without classes)
 def build_tree(X, Y, max_depth, current_depth=0):
     if current_depth >= max_depth or len(np.unique(Y)) == 1:
         vals, counts = np.unique(Y, return_counts=True)
@@ -84,7 +80,6 @@ def build_tree(X, Y, max_depth, current_depth=0):
 
     return tree
 
-# Function to make predictions using the tree
 def predict_tree(tree, instance):
     if not isinstance(tree, dict):
         return tree
@@ -95,7 +90,6 @@ def predict_tree(tree, instance):
     else:
         return 0
 
-# Train and predict using the decision tree
 def decision_tree_train(X, Y, max_depth):
     return build_tree(X, Y, max_depth)
 
@@ -105,7 +99,6 @@ def decision_tree_predict(tree, X):
         predictions.append(predict_tree(tree, X[i]))
     return np.array(predictions)
 
-# Bagging function (without classes)
 def bagged_trees_train(X, Y, num_trees, max_depth):
     bagged_trees = []
     n_samples = X.shape[0]
@@ -119,7 +112,6 @@ def bagged_trees_train(X, Y, num_trees, max_depth):
 
     return bagged_trees
 
-# Function to predict using bagged trees
 def predict_bagged_trees(bagged_trees, X):
     predictions = np.zeros(X.shape[0])
 
@@ -128,27 +120,20 @@ def predict_bagged_trees(bagged_trees, X):
 
     return np.sign(predictions)
 
-# Vary the number of trees from 1 to 500
 num_trees_list = range(1, 501)
 train_errors_bagged = []
 test_errors_bagged = []
 
 for num_trees in num_trees_list:
-    # Train bagged trees
     bagged_trees = bagged_trees_train(X_train_data, y_train_data, num_trees, max_depth=10)
-
-    # Predictions
     y_train_pred = predict_bagged_trees(bagged_trees, X_train_data)
     y_test_pred = predict_bagged_trees(bagged_trees, X_test_data)
-
-    # Calculate training and test errors
     train_error = 1 - accuracy_score(y_train_data, y_train_pred)
     test_error = 1 - accuracy_score(y_test_data, y_test_pred)
 
     train_errors_bagged.append(train_error)
     test_errors_bagged.append(test_error)
 
-# Plot the training and test errors
 plt.figure(figsize=(10, 6))
 plt.plot(num_trees_list, train_errors_bagged, label='Train Error (Bagging)')
 plt.plot(num_trees_list, test_errors_bagged, label='Test Error (Bagging)')

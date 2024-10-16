@@ -3,11 +3,9 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 
-# Load and preprocess the dataset
 train_file = "/content/sample_data/Bank/train.csv"
 test_file = "/content/sample_data/Bank/test.csv"
 
-# Binary classification problem, converting 'yes' and 'no' to 1 and -1 respectively
 columns = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
 data_types = {
     'age': float,
@@ -36,7 +34,6 @@ test_data = pd.read_csv(test_file, names=columns, dtype=data_types)
 X_test = test_data.drop('y', axis=1).values
 y_test = test_data['y'].apply(lambda label: 1 if label == 'yes' else -1).values
 
-# Convert non-numeric columns to numeric
 def convert_to_numeric(X):
     for i in range(X.shape[1]):
         col = X[:, i]
@@ -46,7 +43,6 @@ def convert_to_numeric(X):
         X[:, i] = col
     return X
 
-# Function to calculate information gain (entropy-based)
 def calculate_gain(X, y, feature_idx, threshold, sample_weights):
     n = len(y)
     left_group = X[:, feature_idx] <= threshold
@@ -64,7 +60,6 @@ def calculate_gain(X, y, feature_idx, threshold, sample_weights):
     total_entropy = (weight_left / n) * entropy_left + (weight_right / n) * entropy_right
     return total_entropy
 
-# Function to find the best feature and threshold for splitting
 def determine_best_split(X, y, sample_weights):
     num_features = X.shape[1]
     best_threshold = None
@@ -85,7 +80,6 @@ def determine_best_split(X, y, sample_weights):
 
     return best_feature, best_threshold
 
-# Train a decision stump (simple decision tree with only one split)
 def train_stump(X, y, sample_weights):
     best_error = float('inf')
     best_stump = None
@@ -104,7 +98,6 @@ def train_stump(X, y, sample_weights):
 
     return best_stump, best_labels
 
-# AdaBoost Algorithm (Functional Approach)
 def adaboost(X, y, num_iterations, learning_rate):
     X = convert_to_numeric(X)
     y = y.astype(float)
@@ -117,14 +110,10 @@ def adaboost(X, y, num_iterations, learning_rate):
     stump_errors = []
 
     for i in range(num_iterations):
-        # Train a decision stump
         (feature, threshold), (label_left, label_right) = train_stump(X, y, sample_weights)
         stump_predictions = np.where(X[:, feature] <= threshold, label_left, label_right)
-
-        # Calculate the error rate
         stump_error = np.sum(sample_weights * (stump_predictions != y))
 
-        # Calculate the weight of the stump (alpha)
         if stump_error == 0:
             alpha = 1.0
         else:
@@ -132,12 +121,8 @@ def adaboost(X, y, num_iterations, learning_rate):
 
         alphas.append(alpha)
         stumps.append((feature, threshold, label_left, label_right))
-
-        # Update sample weights
         sample_weights *= np.exp(-alpha * y * stump_predictions)
         sample_weights /= np.sum(sample_weights)
-
-        # Record training and test errors for this iteration
         train_preds = adaboost_predict(X_train, alphas, stumps)
         test_preds = adaboost_predict(X_test, alphas, stumps)
         train_errors.append(1 - accuracy_score(y_train, train_preds))
@@ -146,7 +131,6 @@ def adaboost(X, y, num_iterations, learning_rate):
 
     return alphas, stumps, train_errors, test_errors, stump_errors
 
-# Predict using the AdaBoost model
 def adaboost_predict(X, alphas, stumps):
     n_samples = X.shape[0]
     final_predictions = np.zeros(n_samples)
@@ -157,12 +141,9 @@ def adaboost_predict(X, alphas, stumps):
 
     return np.sign(final_predictions)
 
-# Example usage
 num_iterations = 500
 learning_rate = 0.5
 alphas, stumps, train_errors, test_errors, stump_errors = adaboost(X_train, y_train, num_iterations, learning_rate)
-
-# Calculate and print final training and test errors
 train_error = 1 - accuracy_score(y_train, adaboost_predict(X_train, alphas, stumps))
 test_error = 1 - accuracy_score(y_test, adaboost_predict(X_test, alphas, stumps))
 

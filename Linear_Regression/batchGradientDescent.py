@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the data
-train_data_path = '/mnt/data/train.csv'
-test_data_path = '/mnt/data/test.csv'
+train_data_path = 'DataSets/Bank/train.csv'
+test_data_path = 'DataSets/Bank/test.csv'
 
 # Load train and test data
 train_df = pd.read_csv(train_data_path, header=None)

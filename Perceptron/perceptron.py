@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 
-train_path = 'DataSets/train.csv''
+train_path = 'DataSets/train.csv'
 test_path = 'DataSets/test.csv'
 
 train_data = pd.read_csv(train_path, header=None)

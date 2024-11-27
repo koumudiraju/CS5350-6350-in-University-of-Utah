@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 from sklearn.utils import shuffle
 
-train_path = "/content/train.csv"
-test_path = "/content/test.csv"
+train_path = "DataSets/train.csv"
+test_path = "DataSets/test.csv"
 
 train_data = pd.read_csv(train_path, header=None)
 test_data = pd.read_csv(test_path, header=None)

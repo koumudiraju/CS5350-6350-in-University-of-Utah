@@ -3,8 +3,8 @@ import pandas as pd
 from sklearn.utils import shuffle
 from scipy.optimize import minimize
 
-train_data = pd.read_csv("/content/train.csv", header=None)
-test_data = pd.read_csv("/content/test.csv", header=None)
+train_data = pd.read_csv("DataSets/train.csv", header=None)
+test_data = pd.read_csv("DataSets/test.csv", header=None)
 
 train_data.iloc[:, -1] = train_data.iloc[:, -1].map({1: 1, 0: -1})
 test_data.iloc[:, -1] = test_data.iloc[:, -1].map({1: 1, 0: -1})

@@ -8,8 +8,8 @@ from imblearn.over_sampling import SMOTE
 import pandas as pd
 import numpy as np
 
-train_data = pd.read_csv('/content/train_final.csv')
-test_data = pd.read_csv('/content/test_final.csv')
+train_data = pd.read_csv('Project/DataSets/train_final.csv')
+test_data = pd.read_csv('Project/DataSets/test_final.csv')
 
 def preprocess_data(df):
     df = df.replace('?', np.nan)
